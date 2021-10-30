@@ -10,8 +10,7 @@ pipeline {
          stage('local opencart configure') {
             steps {
                 sh """
-                docker-compose down -v
-                OPENCART_HOST=`hostname -I | awk '{print \$1}'`
+                HOST_IP=`hostname -I | awk '{print \$1}'`
                 docker-compose up -d
                 """
             }

@@ -15,6 +15,7 @@ services:
       - '80:8080'
       - '443:8443'
     environment:
+      - OPENCART_HOST=${HOST_IP}
       - OPENCART_DATABASE_HOST=mariadb
       - OPENCART_DATABASE_PORT_NUMBER=3306
       - OPENCART_DATABASE_USER=bn_opencart
