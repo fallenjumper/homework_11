@@ -10,15 +10,21 @@ pipeline {
          stage('local opencart configure') {
             steps {
                 sh """
-				    OPENCART_HOST=`hostname -I | awk '{print $1}'`
-				    docker-compose up
+                docker-compose down -v
+                OPENCART_HOST=`hostname -I | awk '{print \$1}'`
+                docker-compose up -d
                 """
             }
         }
-         stage('run') {
+         stage('run myapp') {
             steps {
-                sh 'docker-compose up --abort-on-container-exit'
+                sh 'docker run --env EXECUTOR_IP=192.168.17.2 --env OPENCART_HOST=192.168.17.9 --env OPENCART_PORT=80 myapp:latest tests/test_admin_page.py::test_admin_page -v --selenoid_run --bversion 92.0 --browser chrome'
             }
+        }
+    }
+    post {
+        always {
+            sh 'docker-compose down -v'
         }
     }
 }
