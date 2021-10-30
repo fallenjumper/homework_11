@@ -28,6 +28,7 @@ services:
     depends_on:
       - mariadb
   myapp:
+    image: myapp:latest
     command: -v --selenoid_run --bversion 92.0 --browser chrome
     environment:
       - EXECUTOR_IP=192.168.17.6
