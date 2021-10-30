@@ -15,7 +15,7 @@ services:
       - '80:8080'
       - '443:8443'
     environment:
-      - OPENCART_HOST=192.168.17.6
+      - OPENCART_HOST=localhost
       - OPENCART_DATABASE_HOST=mariadb
       - OPENCART_DATABASE_PORT_NUMBER=3306
       - OPENCART_DATABASE_USER=bn_opencart
@@ -27,15 +27,6 @@ services:
       - 'opencart_storage_data:/bitnami/opencart_storage/'
     depends_on:
       - mariadb
-  myapp:
-    image: myapp:latest
-    command: -v --selenoid_run --bversion 92.0 --browser chrome
-    environment:
-      - EXECUTOR_IP=192.168.17.6
-      - OPENCART_HOST=192.168.17.6
-      - OPENCART_PORT=80
-    depends_on:
-      - opencart
 volumes:
   mariadb_data:
     driver: local
