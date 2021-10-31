@@ -16,7 +16,7 @@ pipeline {
                             docker-compose up -d
                            fi
                        """
-                }
+             }
         }
         stage('run myapp') {
              steps {
@@ -27,9 +27,9 @@ pipeline {
                             docker run --env EXECUTOR_IP=$EXECUTOR_IP --env OPENCART_HOST=$OPENCART_HOST --env OPENCART_PORT=$OPENCART_PORT myapp:latest -n $THREADS -v --selenoid_run --bversion $BROWSER_VERSION --browser $BROWSER
                        fi
                      """
-                 }
+             }
         }
-    }
+
         stage('generate allure report') {
             steps {
                 script {
@@ -43,6 +43,7 @@ pipeline {
                 }
             }
         }
+    }
     post {
         always {
             sh 'docker-compose down -v'
