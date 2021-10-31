@@ -1,11 +1,13 @@
 pipeline {
     agent any
+
     stages {
         stage('build myapp from Dockerfile') {
             steps {
                 sh 'docker build -t myapp:latest .'
             }
         }
+
          stage('Configure environment') {
                 steps {
                        sh """
@@ -20,9 +22,9 @@ pipeline {
             steps {
                     sh """
                        if [ $OPENCART_HOST = "local" ]; then
-                            docker run --env EXECUTOR_IP=$EXECUTOR_IP --env OPENCART_HOST=`hostname -I | awk '{print \$1}'` --env OPENCART_PORT=$OPENCART_PORT myapp:latest tests/test_main_page.py -v --selenoid_run --bversion $BROWSER_VERSION --browser $BROWSER
+                            docker run --env EXECUTOR_IP=$EXECUTOR_IP --env OPENCART_HOST=`hostname -I | awk '{print \$1}'` --env OPENCART_PORT=$OPENCART_PORT myapp:latest -n $THREADS -v --selenoid_run --bversion $BROWSER_VERSION --browser $BROWSER
                        else
-                            docker run --env EXECUTOR_IP=$EXECUTOR_IP --env OPENCART_HOST=$OPENCART_HOST --env OPENCART_PORT=$OPENCART_PORT myapp:latest tests/test_main_page.py -v --selenoid_run --bversion $BROWSER_VERSION --browser $BROWSER
+                            docker run --env EXECUTOR_IP=$EXECUTOR_IP --env OPENCART_HOST=$OPENCART_HOST --env OPENCART_PORT=$OPENCART_PORT myapp:latest -n $THREADS -v --selenoid_run --bversion $BROWSER_VERSION --browser $BROWSER
                        fi
                      """
                  }
