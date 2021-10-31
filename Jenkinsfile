@@ -8,8 +8,8 @@ pipeline {
             }
         }
 
-         stage('Configure environment') {
-                steps {
+        stage('Configure environment') {
+             steps {
                        sh """
                           if [ $OPENCART_HOST = "local" ]; then
                             export HOST_IP=`hostname -I | awk '{print \$1}'`
@@ -18,8 +18,8 @@ pipeline {
                        """
                 }
         }
-         stage('run myapp') {
-            steps {
+        stage('run myapp') {
+             steps {
                     sh """
                        if [ $OPENCART_HOST = "local" ]; then
                             docker run --env EXECUTOR_IP=$EXECUTOR_IP --env OPENCART_HOST=`hostname -I | awk '{print \$1}'` --env OPENCART_PORT=$OPENCART_PORT myapp:latest -n $THREADS -v --selenoid_run --bversion $BROWSER_VERSION --browser $BROWSER
@@ -30,6 +30,19 @@ pipeline {
                  }
         }
     }
+        stage('generate allure report') {
+            steps {
+                script {
+                    allure([
+                        includeProperties: false,
+                        jdk: '',
+                        properties: [],
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'allure-results']]
+                    ])
+                }
+            }
+        }
     post {
         always {
             sh 'docker-compose down -v'
